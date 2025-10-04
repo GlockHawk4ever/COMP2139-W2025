@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "COMP2139-ICE/1.0.0": {
+        "runtime": {
+          "COMP2139-ICE.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "COMP2139-ICE/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
