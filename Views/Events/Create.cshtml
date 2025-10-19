@@ -1,0 +1,11 @@
+@model EventTickets.Models.Event
+<h1>Create Event</h1>
+<form asp-action="Create" method="post">
+  <div><label asp-for="Title"></label><input asp-for="Title" /><span asp-validation-for="Title" class="text-danger"></span></div>
+  <div><label asp-for="CategoryId">Category</label><select asp-for="CategoryId" asp-items="ViewBag.CategoryOptions"></select><span asp-validation-for="CategoryId" class="text-danger"></span></div>
+  <div><label asp-for="DateTime"></label><input asp-for="DateTime" type="datetime-local" /></div>
+  <div><label asp-for="Price"></label><input asp-for="Price" /><span asp-validation-for="Price" class="text-danger"></span></div>
+  <div><label asp-for="AvailableTickets"></label><input asp-for="AvailableTickets" /><span asp-validation-for="AvailableTickets" class="text-danger"></span></div>
+  <button class="btn" type="submit">Save</button> <a class="btn btn-outline" asp-action="Index">Cancel</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

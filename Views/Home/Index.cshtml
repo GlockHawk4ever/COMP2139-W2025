@@ -1,0 +1,29 @@
+@{ ViewData["Title"] = "Home • VETicket"; }
+<div class="card" style="margin:1rem 0;">
+  <strong>Demo Tips:</strong> Use the <a asp-controller="Checklist" asp-action="Index">Checklist</a> page to click through the demo.
+</div>
+<section class="hero">
+  <div class="hero-content">
+    <h1>Host & Join Virtual Events with Ease</h1>
+    <p>Manage events, browse by category, and purchase tickets as a guest—no login required.</p>
+    <div class="cta">
+      <a class="btn" asp-controller="Events" asp-action="Index">Browse Events</a>
+      <a class="btn btn-outline" asp-controller="Purchases" asp-action="Create">Buy Tickets</a>
+      <a class="btn btn-outline" asp-controller="Search" asp-action="Index">Search</a>
+      <a class="btn btn-outline" asp-controller="Checklist" asp-action="Index">Checklist</a>
+    </div>
+  </div>
+</section>
+<section class="features">
+  <article class="card"><h3>Event Management</h3><p>Create, update, and delete events. Track ticket availability.</p></article>
+  <article class="card"><h3>Search & Filters</h3><p>Find events by title, category, date range, and price.</p></article>
+  <article class="card"><h3>Guest Purchasing</h3><p>Buy tickets without creating an account and get a summary.</p></article>
+</section>
+<section class="status">
+  <h2>Overview</h2>
+  <div class="status-grid">
+    <div class="metric"><span class="metric-value">@ViewBag.TotalEvents</span><span class="metric-label">Total Events</span></div>
+    <div class="metric"><span class="metric-value">@ViewBag.TotalCategories</span><span class="metric-label">Categories</span></div>
+    <div class="metric metric-alert" title="Low ticket availability: &lt; 5"><span class="metric-value">@ViewBag.LowTicketEvents</span><span class="metric-label">Low-Ticket Events</span></div>
+  </div>
+</section>
