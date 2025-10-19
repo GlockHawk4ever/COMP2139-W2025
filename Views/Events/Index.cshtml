@@ -1,0 +1,17 @@
+@model IReadOnlyList<EventTickets.Models.Event>
+@{ var categories = ViewBag.Categories as List<string> ?? new(); string selected = ViewBag.SelectedCategory as string; string q = ViewBag.Search as string; }
+<h1>Events</h1>
+@if (TempData["Message"] is string m) { <div class="card" style="margin:.5rem 0; padding:.5rem 1rem;">@m</div> }
+<form method="get" style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; margin:.5rem 0 1rem;">
+  <input type="search" name="q" placeholder="Search title..." value="@q" />
+  <select name="category"><option value="">All categories</option>@foreach (var c in categories){<option value="@c" selected="@(selected==c)">@c</option>}</select>
+  <button class="btn" type="submit">Filter</button><a class="btn btn-outline" asp-action="Index">Reset</a>
+</form>
+<p><a class="btn" asp-action="Create">Create New Event</a></p>
+@if (Model.Count == 0){ <p class="muted">No events found.</p> } else {
+<table><thead><tr><th>Title</th><th>Category</th><th>Date &amp; Time</th><th>Price</th><th>Available</th><th></th></tr></thead>
+<tbody>
+@foreach (var e in Model){<tr><td>@e.Title</td><td>@e.Category?.Name</td><td>@(e.DateTime?.ToString("yyyy-MM-dd HH:mm") ?? "-")</td><td>$@e.Price</td><td>@e.AvailableTickets</td>
+<td><a asp-action="Edit" asp-route-id="@e.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@e.Id">Delete</a></td></tr>}
+</tbody></table>}
+<p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>

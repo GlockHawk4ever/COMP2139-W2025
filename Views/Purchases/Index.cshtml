@@ -1,0 +1,8 @@
+@model IReadOnlyList<EventTickets.Models.Purchase>
+<h1>Purchase History</h1>
+@if (Model == null || Model.Count == 0){ <p class="muted">No purchases yet.</p><p><a class="btn" asp-action="Create">Buy Tickets</a></p> } else {
+<table><thead><tr><th>Purchased</th><th>Event</th><th>Quantity</th><th>Total</th><th>Guest</th></tr></thead><tbody>
+@foreach (var p in Model){<tr><td>@p.PurchasedAt.ToString("yyyy-MM-dd HH:mm")</td><td>@p.Event?.Title</td><td>@p.Quantity</td><td>$@p.Total</td><td>@p.CustomerName (@p.Email)</td></tr>}
+</tbody></table>
+<p style="margin-top:1rem;"><a class="btn" asp-action="Create">Buy More Tickets</a></p>}
+<p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>
