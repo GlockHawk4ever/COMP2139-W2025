@@ -1,0 +1,42 @@
+@model COMP2139_ICE.Areas.ProjectManagement.Models.Project
+@{
+    ViewData["Title"] = "Delete Project";
+}
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<h3>Are you sure you want to delete this project?</h3>
+
+<dl class="row">
+    <dt class="col-sm-2">Name</dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Name, "ProjectName")
+    </dd>
+
+    <dt class="col-sm-2">Description</dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Description, "ProjectDescription")
+    </dd>
+
+    <dt class="col-sm-2">Start Date</dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.StartDate)
+    </dd>
+
+    <dt class="col-sm-2">End Date</dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.DueDate)
+    </dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Status</dd>
+</dl>
+
+<form asp-area="ProjectManagement"
+      asp-controller="Projects"
+      asp-action="DeleteConfirmed"
+      asp-route-id="@Model.Id"
+      method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-area="ProjectManagement" asp-controller="Projects" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

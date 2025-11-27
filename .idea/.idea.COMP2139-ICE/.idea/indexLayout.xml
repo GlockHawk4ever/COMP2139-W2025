@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="UserContentModel">
-    <attachedFolders />
+    <attachedFolders>
+      <Path>../../COMP2139-ICE-Lab4-9-Areas-Final-EnsureCreated</Path>
+    </attachedFolders>
     <explicitIncludes />
     <explicitExcludes />
   </component>

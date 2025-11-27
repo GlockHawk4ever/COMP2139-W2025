@@ -1,0 +1,88 @@
+@model IEnumerable<COMP2139_ICE.Areas.ProjectManagement.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+    bool isSearch = ViewBag.IsSearch == true;
+    string searchTerm = ViewBag.SearchTerm as string;
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<p>
+    <a asp-area="ProjectManagement"
+       asp-controller="Projects"
+       asp-action="Create"
+       class="btn btn-primary">Create New Project</a>
+</p>
+
+@if (!Model.Any())
+{
+    if (isSearch)
+    {
+        <p>No projects found for "@searchTerm".</p>
+    }
+    else
+    {
+        <p>No projects available.</p>
+    }
+}
+else
+{
+    @if (isSearch && !string.IsNullOrWhiteSpace(searchTerm))
+    {
+        <p>Showing results for "<strong>@searchTerm</strong>".</p>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Project Name</th>
+                <th>Project Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Summary</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Id</td>
+                <td>@Html.DisplayFor(modelItem => p.Name, "ProjectName")</td>
+                <td>@Html.DisplayFor(modelItem => p.Description, "ProjectDescription")</td>
+                <td>@Html.DisplayFor(modelItem => p.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => p.DueDate)</td>
+                <td>@p.Status</td>
+                <td>
+                    @await Component.InvokeAsync("ProjectSummary", new { projectId = p.Id })
+                </td>
+                <td>
+                    <a asp-area="ProjectManagement"
+                       asp-controller="Projects"
+                       asp-action="Details"
+                       asp-route-id="@p.Id"
+                       class="btn btn-sm btn-info">Details</a>
+                    <a asp-area="ProjectManagement"
+                       asp-controller="Projects"
+                       asp-action="Edit"
+                       asp-route-id="@p.Id"
+                       class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-area="ProjectManagement"
+                       asp-controller="Projects"
+                       asp-action="Delete"
+                       asp-route-id="@p.Id"
+                       class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-area="ProjectManagement"
+                       asp-controller="ProjectTask"
+                       asp-action="Index"
+                       asp-route-projectId="@p.Id"
+                       class="btn btn-sm btn-secondary">View Tasks</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

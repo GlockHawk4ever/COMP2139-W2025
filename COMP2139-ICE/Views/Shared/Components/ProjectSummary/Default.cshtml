@@ -1,0 +1,39 @@
+@model COMP2139_ICE.Areas.ProjectManagement.Models.Project
+
+@if (Model == null)
+{
+    <span>No project summary available.</span>
+}
+else
+{
+    <p>@Html.DisplayFor(m => m.Name, "ProjectName")</p>
+    <p>@Html.DisplayFor(m => m.Description, "ProjectDescription")</p>
+
+    <p>
+        <b>Start Date: </b>
+        @Html.DisplayFor(m => m.StartDate)
+    </p>
+
+    <p>
+        <b>End Date: </b>
+        @Html.DisplayFor(m => m.DueDate)
+    </p>
+
+    <p>
+        <b>Status: </b>@Model.Status
+    </p>
+
+    @if (Model.Tasks != null && Model.Tasks.Any())
+    {
+        <p><b>Tasks</b></p>
+        <ul>
+            @foreach (var task in Model.Tasks)
+            {
+                <li>
+                    @Html.DisplayFor(_ => task.Title, "ProjectTaskTitle")
+                    @Html.DisplayFor(_ => task.Description, "ProjectDescription")
+                </li>
+            }
+        </ul>
+    }
+}

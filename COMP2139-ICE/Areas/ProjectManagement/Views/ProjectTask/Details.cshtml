@@ -1,0 +1,32 @@
+@model COMP2139_ICE.Areas.ProjectManagement.Models.ProjectTask
+@{
+    ViewData["Title"] = "Task Details";
+}
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Task ID</dt>
+    <dd class="col-sm-10">@Model.ProjectTaskId</dd>
+
+    <dt class="col-sm-2">Title</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(m => m.Title, "ProjectTaskTitle")</dd>
+
+    <dt class="col-sm-2">Description</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+
+    <dt class="col-sm-2">Project Id</dt>
+    <dd class="col-sm-10">@Model.ProjectId</dd>
+</dl>
+
+<p>
+    <a asp-area="ProjectManagement"
+       asp-controller="ProjectTask"
+       asp-action="Edit"
+       asp-route-id="@Model.ProjectTaskId"
+       class="btn btn-primary">Edit</a>
+    <a asp-area="ProjectManagement"
+       asp-controller="ProjectTask"
+       asp-action="Index"
+       asp-route-projectId="@Model.ProjectId"
+       class="btn btn-secondary">Back to List</a>
+</p>
