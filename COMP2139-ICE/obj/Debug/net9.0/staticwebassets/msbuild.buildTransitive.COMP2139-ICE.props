@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\COMP2139-ICE.props" />
-</Project>
