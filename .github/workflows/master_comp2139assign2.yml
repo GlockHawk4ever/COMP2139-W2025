@@ -1,9 +1,5 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+name: Build and deploy ASP.NET Core app to Azure Web App - COMP2139Assign2
 
-- name: Build
-      run:dotnet build --configuration Release
-      working-directory:EventTickets
 on:
   push:
     branches:
@@ -14,42 +10,47 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore
+        run: dotnet restore
+        working-directory: EventTickets
 
-       - name: Publish
-      run: dotnet publish -c Release -o ${{ env.DOTNET_ROOT }}/myapp
-      working-directory: EventTickets
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: EventTickets
+
+      - name: Publish
+        run: dotnet publish -c Release -o ./publish
+        working-directory: EventTickets
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: EventTickets/publish
 
   deploy:
     runs-on: windows-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write   # required for requesting the JWT
+      contents: read    # required for actions/checkout
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -64,5 +65,3 @@ jobs:
           app-name: 'COMP2139Assign2'
           slot-name: 'Production'
           package: .
-
-          
