@@ -1,0 +1,140 @@
+@model EventTickets.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<section class="dashboard">
+    <h1>My Dashboard</h1>
+
+    <div class="dashboard-grid">
+        <!-- Profile -->
+        <div class="card">
+            <h2>Profile</h2>
+            <form asp-action="Index" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input class="text-input" name="FullName" value="@Model.CurrentUser?.FullName" />
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input class="text-input" name="PhoneNumber" value="@Model.CurrentUser?.PhoneNumber" />
+                </div>
+                <p class="hint">Profile editing is cosmetic for this assignment demo.</p>
+            </form>
+        </div>
+
+        <!-- Upcoming Tickets -->
+        <div class="card">
+            <h2>My Upcoming Tickets</h2>
+            @if (!Model.UpcomingTickets.Any())
+            {
+                <p>No upcoming tickets.</p>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Ticket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var p in Model.UpcomingTickets)
+                    {
+                        <tr>
+                            <td>@p.Event?.Title</td>
+                            <td>@p.Event?.DateTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@p.Quantity</td>
+                            <td>@p.Total.ToString("C")</td>
+                            <td>
+                                <div class="ticket-actions">
+                                    <a asp-controller="Purchases" asp-action="DownloadTicket" asp-route-id="@p.Id">Download</a>
+                                    <img class="dashboard-qr"
+                                         src="@Url.Action("TicketQr", "Purchases", new { id = p.Id })"
+                                         alt="QR code" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- Purchase History -->
+        <div class="card">
+            <h2>Purchase History &amp; Ratings</h2>
+            @if (!Model.PastPurchases.Any())
+            {
+                <p>No past purchases.</p>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var p in Model.PastPurchases)
+                    {
+                        <tr>
+                            <td>@p.Event?.Title</td>
+                            <td>@p.Event?.DateTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@p.Quantity</td>
+                            <td>@p.Total.ToString("C")</td>
+                            <td>@(p.Rating?.ToString() ?? "-")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- Organizer Events -->
+        <div class="card">
+            <h2>My Events (Organizer View)</h2>
+            @if (!Model.MyEvents.Any())
+            {
+                <p>You don't have any events as an organizer yet.</p>
+            }
+            else
+            {
+                <p>Quick list of events you organize and their total revenue.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var e in Model.MyEvents)
+                    {
+                        var revenue = Model.RevenueByEvent.ContainsKey(e.Id)
+                            ? Model.RevenueByEvent[e.Id]
+                            : 0m;
+                        <tr>
+                            <td>@e.Title</td>
+                            <td>@e.Category?.Name</td>
+                            <td>@e.DateTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@revenue.ToString("C")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</section>

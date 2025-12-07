@@ -1,0 +1,21 @@
+@using Microsoft.AspNetCore.Identity
+@using EventTickets.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="nav-links auth-links">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li><a asp-controller="Dashboard" asp-action="Index">My Dashboard</a></li>
+    <li>
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post" class="logout-form">
+            <button type="submit" class="btn-link">Logout (@User.Identity?.Name)</button>
+        </form>
+    </li>
+}
+else
+{
+    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+}
+</ul>

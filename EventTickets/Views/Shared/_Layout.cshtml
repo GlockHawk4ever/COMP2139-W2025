@@ -1,0 +1,41 @@
+@{
+    Layout = null;
+    var title = ViewData["Title"] as string ?? "Virtual Event Ticketing";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+<header class="site-header">
+    <nav class="nav">
+        <a class="logo" asp-controller="Home" asp-action="Index">🎟️ VETicket</a>
+        <button id="navToggle" class="nav-toggle" aria-label="Toggle Navigation">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-controller="Events" asp-action="Index">Events</a></li>
+            <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
+            <li><a asp-controller="Purchases" asp-action="Create">Buy Tickets</a></li>
+            <li><a asp-controller="Purchases" asp-action="Index">Purchases</a></li>
+            <li><a asp-controller="Checklist" asp-action="Index">Checklist</a></li>
+        </ul>
+        <partial name="_LoginPartial" />
+    </nav>
+</header>
+<main class="container">@RenderBody()</main>
+<footer class="site-footer">
+    <p>COMP2139 – Assignment 1 • Group #11</p>
+    <p>Members: Taharim Haque</p>
+    <p>&copy; @DateTime.Now.Year VETicket • <strong>Build: vSoldOut</strong></p>
+</footer>
+<script>
+ const btn=document.getElementById('navToggle'); const links=document.getElementById('navLinks');
+ btn?.addEventListener('click',()=>links?.classList.toggle('open'));
+</script>
+@RenderSection("Scripts", required: false)
+</body>
+</html>

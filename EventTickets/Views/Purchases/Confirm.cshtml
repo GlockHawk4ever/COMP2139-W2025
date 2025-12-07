@@ -1,0 +1,10 @@
+@model EventTickets.Models.Purchase
+<h1>Purchase Summary</h1>
+<ul>
+  <li><strong>Event:</strong> @Model.Event?.Title</li>
+  <li><strong>Purchase Date:</strong> @Model.PurchasedAt.ToString("yyyy-MM-dd HH:mm")</li>
+  <li><strong>Quantity:</strong> @Model.Quantity</li>
+  <li><strong>Total Cost:</strong> $@Model.Total</li>
+  <li><strong>Guest:</strong> @Model.CustomerName (@Model.Email)</li>
+</ul>
+<p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>
