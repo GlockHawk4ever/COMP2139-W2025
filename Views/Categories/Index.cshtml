@@ -1,8 +1,0 @@
-@model IReadOnlyList<EventTickets.Models.Category>
-<h1>Categories</h1>
-<p><a class="btn" asp-action="Create">Create Category</a></p>
-@if (Model == null || Model.Count == 0){ <p class="muted">No categories yet.</p> } else {
-<table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody>
-@foreach (var c in Model){<tr><td>@c.Name</td><td>@c.Description</td></tr>}
-</tbody></table>}
-<p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using QRCoder;
 
 namespace EventTickets.Controllers;
@@ -13,11 +14,13 @@ public class PurchasesController : Controller
 {
     private readonly AppDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<PurchasesController> _logger;
 
-    public PurchasesController(AppDbContext db, UserManager<ApplicationUser> userManager)
+    public PurchasesController(AppDbContext db, UserManager<ApplicationUser> userManager, ILogger<PurchasesController> logger)
     {
         _db = db;
         _userManager = userManager;
+        _logger = logger;
     }
 
     // Purchase history for the logged-in user
@@ -89,6 +92,9 @@ public class PurchasesController : Controller
         _db.Purchases.Add(input);
         ev.AvailableTickets -= input.Quantity;
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("User {UserId} purchased {Qty} tickets for event {EventId} at total {Total}",
+            user.Id, input.Quantity, input.EventId, input.Total);
 
         return RedirectToAction(nameof(Confirm), new { id = input.Id });
     }

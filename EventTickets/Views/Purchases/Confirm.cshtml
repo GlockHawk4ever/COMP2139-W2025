@@ -1,10 +1,57 @@
 @model EventTickets.Models.Purchase
-<h1>Purchase Summary</h1>
-<ul>
-  <li><strong>Event:</strong> @Model.Event?.Title</li>
-  <li><strong>Purchase Date:</strong> @Model.PurchasedAt.ToString("yyyy-MM-dd HH:mm")</li>
-  <li><strong>Quantity:</strong> @Model.Quantity</li>
-  <li><strong>Total Cost:</strong> $@Model.Total</li>
-  <li><strong>Guest:</strong> @Model.CustomerName (@Model.Email)</li>
-</ul>
-<p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>
+@{
+    ViewData["Title"] = "Purchase Confirmed";
+}
+<div class="purchase-confirmation">
+    <h1>Purchase Summary</h1>
+    <ul>
+      <li><strong>Event:</strong> @Model.Event?.Title</li>
+      <li><strong>Purchase Date:</strong> @Model.PurchasedAt.ToString("yyyy-MM-dd HH:mm")</li>
+      <li><strong>Quantity:</strong> @Model.Quantity</li>
+      <li><strong>Total Cost:</strong> $@Model.Total</li>
+      <li><strong>Guest:</strong> @Model.CustomerName (@Model.Email)</li>
+    </ul>
+    <p><a asp-controller="Home" asp-action="Index">← Back to Home</a></p>
+</div>
+
+<div class="modal" id="purchaseModal" tabindex="-1" style="display:none; background:rgba(0,0,0,.6); position:fixed; inset:0; align-items:center; justify-content:center;">
+  <div class="modal-dialog" style="background:#fff; padding:1.5rem; border-radius:.5rem; max-width:480px; width:90%; position:relative;">
+    <h2>Thank you for your purchase! 🎉</h2>
+    <p>Your tickets are confirmed. A copy of this summary has been saved to your account.</p>
+    <button type="button" class="btn" id="closeModalButton">Close</button>
+  </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script>
+        (function () {
+            const modal = document.getElementById("purchaseModal");
+            const closeButton = document.getElementById("closeModalButton");
+
+            function openModal() {
+                if (!modal) return;
+                modal.style.display = "flex";
+
+                if (window.confetti) {
+                    confetti({
+                        particleCount: 120,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }
+
+            function closeModal() {
+                if (!modal) return;
+                modal.style.display = "none";
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener("click", closeModal);
+            }
+
+            window.addEventListener("load", openModal);
+        })();
+    </script>
+}

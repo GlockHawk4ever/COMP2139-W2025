@@ -1,8 +1,0 @@
-@model EventTickets.Models.Category
-<h1>Create Category</h1>
-<form asp-action="Create" method="post">
-  <div><label asp-for="Name"></label><input asp-for="Name" /><span asp-validation-for="Name" class="text-danger"></span></div>
-  <div><label asp-for="Description"></label><textarea asp-for="Description"></textarea></div>
-  <button class="btn" type="submit">Save</button> <a class="btn btn-outline" asp-action="Index">Cancel</a>
-</form>
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -22,13 +22,16 @@
             <li><a asp-controller="Purchases" asp-action="Create">Buy Tickets</a></li>
             <li><a asp-controller="Purchases" asp-action="Index">Purchases</a></li>
             <li><a asp-controller="Checklist" asp-action="Index">Checklist</a></li>
+            @if (User.IsInRole("Admin") || User.IsInRole("Organizer")) {
+                <li><a asp-controller="Events" asp-action="MyAnalytics">My Analytics</a></li>
+            }
         </ul>
         <partial name="_LoginPartial" />
     </nav>
 </header>
 <main class="container">@RenderBody()</main>
 <footer class="site-footer">
-    <p>COMP2139 – Assignment 1 • Group #11</p>
+    <p>COMP2139 – Assignment 2 • Group #11</p>
     <p>Members: Taharim Haque</p>
     <p>&copy; @DateTime.Now.Year VETicket • <strong>Build: vSoldOut</strong></p>
 </footer>

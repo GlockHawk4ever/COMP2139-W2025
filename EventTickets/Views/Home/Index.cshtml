@@ -27,3 +27,42 @@
     <div class="metric metric-alert" title="Low ticket availability: &lt; 5"><span class="metric-value">@ViewBag.LowTicketEvents</span><span class="metric-label">Low-Ticket Events</span></div>
   </div>
 </section>
+
+<section class="live-search">
+  <h2>Live Event Search</h2>
+  <p class="muted">Start typing an event name – results update instantly without reloading the page.</p>
+  <input type="search" id="liveSearchInput" placeholder="Search upcoming events..." autocomplete="off" />
+  <div id="liveSearchResults" style="margin-top:1rem;">
+    <p class="muted">No search yet. Start typing above to see matching events.</p>
+  </div>
+</section>
+
+
+@section Scripts {
+  <script>
+    (function () {
+      const input = document.getElementById('liveSearchInput');
+      const results = document.getElementById('liveSearchResults');
+      if (!input || !results) return;
+
+      let timeoutId;
+      input.addEventListener('input', function () {
+        const term = input.value || '';
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(function () {
+          const url = '/Search/Live?q=' + encodeURIComponent(term);
+          fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          })
+            .then(function (response) { return response.text(); })
+            .then(function (html) { results.innerHTML = html; })
+            .catch(function () {
+              results.innerHTML = '<p class="text-danger">There was a problem loading search results.</p>';
+            });
+        }, 300);
+      });
+    })();
+  </script>
+}
+

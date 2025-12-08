@@ -1,0 +1,9 @@
+@{
+    ViewData["Title"] = "Error";
+    var code = ViewBag.StatusCode ?? Context.Response.StatusCode;
+}
+<section class="error-page">
+    <h1>Status code: @(code)</h1>
+    <p>There was a problem handling your request.</p>
+    <p><a asp-controller="Home" asp-action="Index">Go back to Home</a></p>
+</section>

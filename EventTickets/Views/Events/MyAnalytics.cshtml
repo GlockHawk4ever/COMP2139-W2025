@@ -1,0 +1,132 @@
+@{
+    ViewData["Title"] = "My Analytics";
+}
+
+<h1>My Analytics</h1>
+<p class="muted">Charts and stats based on ticket purchases for your events.</p>
+
+<section class="analytics-grid">
+    <div class="card">
+        <h2>Tickets Sold by Category</h2>
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Revenue per Month</h2>
+        <canvas id="revenueChart"></canvas>
+    </div>
+</section>
+
+<section class="card" style="margin-top:1.5rem;">
+    <h2>Top 5 Best-Selling Events</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Event</th>
+            <th>Tickets Sold</th>
+            <th>Total Revenue</th>
+        </tr>
+        </thead>
+        <tbody id="topEventsBody">
+        <tr><td colspan="3" class="muted">Loading…</td></tr>
+        </tbody>
+    </table>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function () {
+            async function getJson(url) {
+                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!response.ok) {
+                    console.error('Request failed', response.status);
+                    return [];
+                }
+                return await response.json();
+            }
+
+            async function loadCategoryChart() {
+                const data = await getJson('/Events/CategorySalesData');
+                if (!data || data.length === 0) return;
+
+                const labels = data.map(d => d.category);
+                const values = data.map(d => d.tickets);
+
+                const canvas = document.getElementById('categoryChart');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tickets Sold',
+                            data: values
+                        }]
+                    }
+                });
+            }
+
+            async function loadRevenueChart() {
+                const data = await getJson('/Events/RevenueByMonthData');
+                if (!data || data.length === 0) return;
+
+                const labels = data.map(d => d.label);
+                const values = data.map(d => d.revenue);
+
+                const canvas = document.getElementById('revenueChart');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenue',
+                            data: values
+                        }]
+                    }
+                });
+            }
+
+            async function loadTopEventsTable() {
+                const data = await getJson('/Events/TopEventsData');
+                const body = document.getElementById('topEventsBody');
+                if (!body) return;
+
+                body.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    body.innerHTML = '<tr><td colspan="3" class="muted">No ticket sales yet.</td></tr>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+
+                    const nameTd = document.createElement('td');
+                    nameTd.textContent = item.title;
+
+                    const ticketsTd = document.createElement('td');
+                    ticketsTd.textContent = item.tickets;
+
+                    const revenueTd = document.createElement('td');
+                    revenueTd.textContent = '$' + item.revenue.toFixed(2);
+
+                    tr.appendChild(nameTd);
+                    tr.appendChild(ticketsTd);
+                    tr.appendChild(revenueTd);
+
+                    body.appendChild(tr);
+                });
+            }
+
+            loadCategoryChart();
+            loadRevenueChart();
+            loadTopEventsTable();
+        })();
+    </script>
+}
